@@ -1,8 +1,8 @@
-const posts = [];
-let lastActivityTime = null;
+let posts = [];
 
-function updateLastUserActivityTime() {
-  return new Promise((resolve, reject) => {
+
+async function updateLastUserActivityTime() {
+  return new Promise((resolve) => {
     setTimeout(() => {
       lastActivityTime = new Date();
       console.log(`User last activity time: ${lastActivityTime}`);
@@ -11,42 +11,29 @@ function updateLastUserActivityTime() {
   });
 }
 
-function createPost(title) {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      const post = { title };
-      posts.push(post);
-      resolve(post);
-    }, 2000);
-  });
+async function createPost(title) {
+  await new Promise((resolve) => setTimeout(resolve, 2000));
+  const post = { title };
+  posts.push(post);
+  return post;
 }
 
-function deletePost() {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      if (posts.length > 0) {
-        const poppedElement = posts.pop();
-        console.log(`Deleted post: ${poppedElement.title}`);
-        resolve();
-      } else {
-        reject("ERROR: ARRAY IS EMPTY");
-      }
-    }, 1000);
-  });
+async function deletePost() {
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+  if (posts.length > 0) {
+    const poppedElement = posts.pop();
+    console.log(`Deleted post: ${poppedElement.title}`);
+  } else {
+    throw new Error("ERROR: ARRAY IS EMPTY");
+  }
 }
 
-// Solution as per requirements
-createPost("Post 1")
-  .then(() => updateLastUserActivityTime())
-  .then(() => createPost("Post 2"))
-  .then(() => updateLastUserActivityTime())
-  .then(() => createPost("Post 3"))
-  .then(() => updateLastUserActivityTime())
-  .then(() => {
-    console.log("All posts created:", posts);
-    return deletePost();
-  })
-  .then(() => {
-    console.log("Posts after deletion:", posts);
-  })
-  .catch((error) => console.log(error));
+async function getColdDrinks() {
+  console.log("Husband gets butter");
+  await createPost("Butter"); // integrating createPost into getColdDrinks
+  console.log("Husband gets cold drinks");
+  await updateLastUserActivityTime(); // integrating updateLastUserActivityTime into getColdDrinks
+  console.log("Enjoying cold drinks");
+}
+
+getColdDrinks();
